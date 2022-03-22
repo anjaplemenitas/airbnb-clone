@@ -10,7 +10,9 @@ class App extends Component {
     super(props);
     this.state = {
       flats: [],
-      selectedFlat: null
+      allFlats: [],
+      selectedFlat: null,
+      search: ""
     };
   }
 
@@ -20,13 +22,21 @@ class App extends Component {
     })
   }
 
+  handleSearch = (event) => {
+    this.setState({
+      search:event.target.value,
+      flats: this.state.allFlats.filter((flat) => new RegExp(event.target.value, "i").exec(flat.name))
+    })
+  }
+
   componentDidMount() {
     const url = "https://raw.githubusercontent.com/lewagon/flats-boilerplate/master/flats.json"
     fetch(url)
       .then(response => response.json())
       .then ((data) => {
         this.setState ({
-          flats: data
+          flats: data,
+          allFlats: data
         });
       })
     }
